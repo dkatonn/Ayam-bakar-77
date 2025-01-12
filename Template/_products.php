@@ -3,28 +3,38 @@
     $item_id = $_GET['item_id'] ?? 1;
     foreach ($product->getData() as $item) :
         if ($item['item_id'] == $item_id) :
+    
+            if($_SERVER['REQUEST_METHOD'] == "POST"){
+                if (isset($_POST['top_sale_submit'])){
+                    // call method addToCart
+                    $Cart->addToCart($_POST['user_id'], $_POST['item_id']);
+                }
+            }        
 ?>
 <section id="product" class="py-3">
     <div class="container">
         <div class="row">
             <div class="col-sm-6">
                 <img src="<?php echo $item['item_image'] ?? "./assets/products/1.png" ?>" alt="product" class="img-fluid">
-                <div class="form-row pt-4 font-size-16 font-baloo">
-                    <div class="col">
-                        <button type="submit" class="btn btn-danger form-control">Lanjutkan Pembayaran</button>
-                    </div>
-                    <div class="col">
+                <form action="post">
+                    <button type="submit" class="btn btn-danger btn-lg font-size-12">Langsung Beli</button>
+                </form>
+                    <form method="post">
+                        <input type="hidden" name="item_id" value="<?php echo $item['item_id'] ?? '1'; ?>">
+                        <input type="hidden" name="user_id" value="<?php echo 1; ?>">
                         <?php
                         if (in_array($item['item_id'], $Cart->getCartId($product->getData('cart')) ?? [])){
-                            echo '<button type="submit" disabled class="btn btn-success font-size-16 form-control">In the Cart</button>';
+                            echo '<button type="submit" disabled class="btn btn-success font-size-12">In the Cart</button>';
                         }else{
-                            echo '<button type="submit" name="top_sale_submit" class="btn btn-warning font-size-16 form-control">Add to Cart</button>';
+                            echo '<button type="submit" name="top_sale_submit" class="btn btn-warning font-size-12">Tambahkan Ke Keranjang</button>';
                         }
                         ?>
-                    </div>
+                    </form>
                 </div>
             </div>
-            <div class="col-sm-6 py-5">
+
+            <!-- Nama produk-->
+            <div class="col-sm-6">
                 <h5 class="font-baloo font-size-30"><?php echo $item['item_name'] ?? "Unknown"; ?></h5>
                 <div class="d-flex">
                     <div class="rating text-warning font-size-12">
@@ -36,6 +46,7 @@
                     </div>
                 </div>
                 <hr class="m-0">
+            <!-- !Nama produk-->
 
                 <!---    product price       -->
                 <table class="my-3">
@@ -45,6 +56,14 @@
                     </tr>
                 </table>
                 <!---    !product price       -->
+                
+                <!-- deskripsi product -->
+                <div class="col-12">
+                    <h6 class="font-rubik">Deskripsi Produk</h6>
+                    <hr>
+                    <p class="font-rale font-size-14">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Repellat inventore vero numquam error est ipsa, consequuntur temporibus debitis nobis sit, delectus officia ducimus dolorum sed corrupti. Sapiente optio sunt provident, accusantium eligendi eius reiciendis animi? Laboriosam, optio qui? Numquam, quo fuga. Maiores minus, accusantium velit numquam a aliquam vitae vel?</p>
+                </div>
+                <!-- deskripsi product -->
 
                 <hr>
 
@@ -62,12 +81,6 @@
                         <!-- !product qty section -->
                     </div>
                 </div>
-            </div>
-
-            <div class="col-12">
-                <h6 class="font-rubik">Deskripsi Produk</h6>
-                <hr>
-                <p class="font-rale font-size-14">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Repellat inventore vero numquam error est ipsa, consequuntur temporibus debitis nobis sit, delectus officia ducimus dolorum sed corrupti. Sapiente optio sunt provident, accusantium eligendi eius reiciendis animi? Laboriosam, optio qui? Numquam, quo fuga. Maiores minus, accusantium velit numquam a aliquam vitae vel?</p>
             </div>
         </div>
     </div>
